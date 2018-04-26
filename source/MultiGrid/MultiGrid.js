@@ -281,13 +281,13 @@ class MultiGrid extends React.PureComponent {
           }}
         />
       );
-    } else {
-      return cellRenderer({
-        ...rest,
-        parent: this,
-        rowIndex: rowIndex + fixedRowCount,
-      });
     }
+
+    return cellRenderer({
+      ...rest,
+      parent: this,
+      rowIndex: rowIndex + fixedRowCount,
+    });
   };
 
   _cellRendererBottomRightGrid = ({columnIndex, rowIndex, ...rest}) => {
@@ -615,19 +615,22 @@ class MultiGrid extends React.PureComponent {
       fixedColumnCount,
       fixedRowCount,
       rowCount,
-      scrollTop,
       hideBottomLeftGridScrollbar,
     } = props;
-    const {showVerticalScrollbar} = this.state;
 
     if (!fixedColumnCount) {
       return null;
     }
 
-    const additionalRowCount = showVerticalScrollbar ? 1 : 0,
+    const adjustedRowCount =
+        this.state.showHorizontalScrollbar && this.state.showVerticalScrollbar
+          ? 1
+          : 0,
       height = this._getBottomGridHeight(props),
       width = this._getLeftGridWidth(props),
-      scrollbarSize = this.state.showVerticalScrollbar ? this.state.scrollbarSize : 0,
+      scrollbarSize = this.state.showVerticalScrollbar
+        ? this.state.scrollbarSize
+        : 0,
       gridWidth = hideBottomLeftGridScrollbar ? width + scrollbarSize : width;
 
     const bottomLeftGrid = (
@@ -640,7 +643,7 @@ class MultiGrid extends React.PureComponent {
         height={height}
         onScroll={enableFixedColumnScroll ? this._onScrollTop : undefined}
         ref={this._bottomLeftGridRef}
-        rowCount={Math.max(0, rowCount - fixedRowCount) + additionalRowCount}
+        rowCount={Math.max(0, rowCount - fixedRowCount) + adjustedRowCount}
         rowHeight={this._rowHeightBottomGrid}
         style={this._bottomLeftGridStyle}
         tabIndex={null}
