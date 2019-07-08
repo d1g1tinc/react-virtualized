@@ -1,7 +1,7 @@
 /** @flow */
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import polyfill from 'react-lifecycles-compat';
+import {polyfill} from 'react-lifecycles-compat';
 import CellMeasurerCacheDecorator from './CellMeasurerCacheDecorator';
 import Grid from '../Grid';
 
@@ -622,10 +622,7 @@ class MultiGrid extends React.PureComponent {
       return null;
     }
 
-    const adjustedRowCount =
-        this.state.showHorizontalScrollbar && this.state.showVerticalScrollbar
-          ? 1
-          : 0,
+    const additionalRowCount = showVerticalScrollbar ? 1 : 0,
       height = this._getBottomGridHeight(props),
       width = this._getLeftGridWidth(props),
       scrollbarSize = this.state.showVerticalScrollbar
